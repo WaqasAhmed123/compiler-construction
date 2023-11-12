@@ -1,8 +1,15 @@
 from docx import Document
 import string
 
+class Token:
+    def __init__(self):
+        self.CP=None 
+        self.VP =None
+        self.LN =None
+
+words = []
+
 def custom_word_splitter(text):
-    words = []
     current_word = ""
 
     for char in text:
@@ -16,8 +23,8 @@ def custom_word_splitter(text):
                 current_word = ""
 
     # Add the last word if the text ends with a letter or digit
-    # if current_word:
-    #     words.append(current_word)
+    if current_word:
+        words.append(current_word)
 
     return words
 
@@ -29,12 +36,16 @@ with open(document_path, 'rb') as file:
     for paragraph in doc.paragraphs:
         text_from_document += paragraph.text + "\n"
 
-
-class Token:
-    
-
-
-
 # Use the custom word splitter
 result = custom_word_splitter(text_from_document)
-print(result)
+
+# Create instances of the Token class based on the words
+Tokens = []
+for word in words:
+    t = Token()
+    t.CP="words"
+    t.VP="vale"
+    t.LN="line"
+    Tokens.append(t)
+for token in Tokens:
+    print(token.CP,token.VP,token.LN)
