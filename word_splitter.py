@@ -1,6 +1,17 @@
 from docx import Document
 import string
 
+punctuators = ['{', '}', '(', ')', '[', ']', ';']
+singleComment = "#"
+multiComment = ' """'
+arithmetic = ['+', '-', '*', '/', '//', '%']
+assignment = ['+=', '-=', '*=', '/=', '%=']
+comparison = ['==', '!=', '<', '>', '<=', '>=']
+logical = ['&&', '||', '!']
+bitwise = ['&', '|', '^', '~', '<<', '>>']
+increment = ['++', '--']
+ternary = '?'
+
 class Token:
     def __init__(self):
         self.CP=None 
@@ -9,43 +20,45 @@ class Token:
 
 words = []
 
-def custom_word_splitter(text):
-    current_word = ""
+def customWordSplitter(text):
+    currentWord = ""
 
     for char in text:
         # If the character is a letter or a digit, add it to the current word
         if char.isalnum() or char in string.punctuation:
-            current_word += char
+            currentWord += char
         else:
             # If the current word is not empty, add it to the list of words
-            if current_word:
-                words.append(current_word)
-                current_word = ""
+            if currentWord:
+                words.append(currentWord)
+                currentWord = ""
 
     # Add the last word if the text ends with a letter or digit
-    if current_word:
-        words.append(current_word)
+    if currentWord:
+        words.append(currentWord)
 
     return words
 
 # Read Word document content using open
-document_path = "word_splitter_doc.docx"
-with open(document_path, 'rb') as file:
+documentPath = "word_splitter_doc.docx"
+with open(documentPath, 'rb') as file:
     doc = Document(file)
-    text_from_document = ""
+    textFromDocument = ""
     for paragraph in doc.paragraphs:
-        text_from_document += paragraph.text + "\n"
+        textFromDocument += paragraph.text + "\n"
 
 # Use the custom word splitter
-result = custom_word_splitter(text_from_document)
+result = customWordSplitter(textFromDocument)
 
 # Create instances of the Token class based on the words
 Tokens = []
 for word in words:
     t = Token()
-    t.CP="words"
-    t.VP="vale"
-    t.LN="line"
+    if(word in punctuators):
+        t.CP="ID"
+        t.VP=word
+        t.LN="line"
     Tokens.append(t)
 for token in Tokens:
     print(token.CP,token.VP,token.LN)
+# print(words)
