@@ -40,15 +40,11 @@ def customWordSplitter(text):
     return words
 
 # Read Word document content using open
-documentPath = "word_splitter_doc.docx"
-with open(documentPath, 'rb') as file:
-    doc = Document(file)
-    textFromDocument = ""
-    for paragraph in doc.paragraphs:
-        textFromDocument += paragraph.text + "\n"
-
+file_path = "file_to_split.txt"
+with open(file_path, 'r', encoding='utf-8') as file:
+    text_from_file = file.read()
 # Use the custom word splitter
-result = customWordSplitter(textFromDocument)
+result = customWordSplitter(text_from_file)
 
 # Create instances of the Token class based on the words
 Tokens = []
@@ -61,4 +57,4 @@ for word in words:
     Tokens.append(t)
 for token in Tokens:
     print(token.CP,token.VP,token.LN)
-# print(words)
+print(words)
