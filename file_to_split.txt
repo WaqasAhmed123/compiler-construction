@@ -5,8 +5,8 @@ Int a=7
 a++
 while(ac)
 {
-var str=”Hello World”;
-a—
+var str="Hello World”;
+a--
 }
 }
 
