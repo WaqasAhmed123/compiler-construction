@@ -4,7 +4,8 @@ dataTypes = ["int", "str", "float", "bool", "char"]
 keywords=["if","else","else if","main","for","break","continue","while", "Public", "Main", "var"]
 punctuators = ['{', '}', '(', ')', '[', ']', ';']
 singleComment = "#"
-multiComment = ' """'
+multiComment = '###'
+# ---------------------------------------------
 arithmetic = ['+', '-', '*', '/', '//', '%']
 assignment = ['+=', '-=', '*=', '/=', '%=','=']
 comparison = ['==', '!=', '<', '>', '<=', '>=']
@@ -15,17 +16,11 @@ ternary = ['?']
 operators = arithmetic + assignment + comparison + logical + bitwise + increment + ternary
 
 # singleCharElements=['+', '-', '*', '/','=','<','>','!','&', '|', '^', '~','%']
-doubleCharElements=['+=', '-=', '*=', '/=', '%=','<=', '>=''&&', '||','++', '--']
+# doubleCharElements=['+=', '-=', '*=', '/=', '%=','<=', '>=''&&', '||','++', '--']
 
 stringCheck=False
 multiCommentChecked=True
-doubleOperator=False
- 
-class Token:
-    def _init_(self):
-        self.CP = None
-        self.VP = None
-        self.LN = None
+
 
 words = []
 
@@ -33,13 +28,14 @@ def customWordSplitter(lines):
     global words
     lexeme = ""
     findingString=False 
+    doubleOperator=False
     for line in lines:
         for index in range(len(line)):
             char = line[index]
-            if char == multiComment:
-                multiLineComment = not multiLineComment
-                break
-            elif char == singleComment:
+            # if char == multiComment:
+            #     multiLineComment = not multiLineComment
+            #     break
+            if char == singleComment:
                 break
             elif(char=='"'):
                 if (lexeme):
@@ -66,16 +62,34 @@ def customWordSplitter(lines):
                     words.append(lexeme)
                     lexeme = ""
             elif char in operators:
+                if doubleOperator:
+                    doubleOperator=False
+                    lexeme=""
+                    print("executed",char+line[index+1])
+                    break
+                    
+                    print("found",char)
+                
                 if lexeme:
                     words.append(lexeme)
                     lexeme = ""
                 if line[index+1]:
-                    if line[index+1] in operators:
-                        lexeme+=line[index]+line[index+1]
+                    print("in second if",char)
+                    if line[index+1]+char in operators:
+                        lexeme+=char+line[index+1]
+                        words.append(lexeme)
+                        lexeme=""
                         doubleOperator=True
+                    else:
+                        lexeme+=char
+                        words.append(lexeme)
+                        lexeme=""
                 else:
-                   if(not doubleOperator):
-                    words.append(line[index])               
+                #    if(not doubleOperator):
+                    print("caught",char)
+                    lexeme+=char
+                    words.append(lexeme)               
+                    lexeme=""
             # elif (isOperator(line[index])):
             # if (lexeme):
             #     words.append(lexeme)
@@ -137,18 +151,19 @@ def customWordSplitter(lines):
 
     return words
 
-f = open("Untitled.txt", "r")
+f = open("file_to_split.txt", "r",encoding="utf-8")
 data = f.read()
 data=data.split("\n")
-S=[]
+linesList=[]
 for line in data:
-    S.append(line+'\n')
+    linesList.append(line+'\n')
 
 
-result = customWordSplitter(S)
-print (result)
-# Create instances of the Token class based on the words
-Tokens = []
+result = customWordSplitter(linesList)
+print(linesList)
+print(words)
+
+
 
 
 def isKeyword(word):
@@ -189,6 +204,16 @@ def isFloat(s):
 def isInt(s):
     return re.match(r'^[+-]?\d+$', s) is not None
 
+
+# Create instances of the Token class based on the words
+Tokens = []
+class Token:
+    def _init_(self):
+        self.CP = None
+        self.VP = None
+        self.LN = None
+
+
 lineNumber=1
 for word in words:
     if word=='\n':
@@ -217,5 +242,6 @@ for word in words:
     else:
         t.CP="undefined"
     Tokens.append(t)
-for token in Tokens:
-    print(token.CP, token.VP, token.LN)
+# for token in Tokens:
+#     print(token.CP, token.VP, token.LN)
+# print()
