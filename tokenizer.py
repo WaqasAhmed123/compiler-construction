@@ -14,10 +14,6 @@ bitwise = ['&', '|', '^', '~', '<<', '>>']
 increment = ['++', '--']
 ternary = ['?']
 operators = arithmetic + assignment + comparison + logical + bitwise + increment + ternary
-
-# singleCharElements=['+', '-', '*', '/','=','<','>','!','&', '|', '^', '~','%']
-# doubleCharElements=['+=', '-=', '*=', '/=', '%=','<=', '>=''&&', '||','++', '--']
-
 stringCheckFlag=False
 
 
@@ -45,9 +41,6 @@ def customWordSplitter(lines):
                     skip_iterations = 2
                     continue
                     
-                    # print("before break",line)
-                    # break
-                    # continue
             if multiLineCommentFlag:
                 print("checked line",line)
                 continue
@@ -101,57 +94,10 @@ def customWordSplitter(lines):
                         words.append(lexeme)
                         lexeme=""
                 else:
-                #    if(not doubleOperator):
                     print("caught",char)
                     lexeme+=char
                     words.append(lexeme)               
                     lexeme=""
-            # elif (isOperator(line[index])):
-            # if (lexeme):
-            #     words.append(lexeme)
-            #     lexeme=""
-            # if isOperator(line[index+1]):
-            #     lexeme+=line[index]+line[index+1]
-            #     complexOperator=True
-            # else:
-            #     if(not complexOperator):
-            #         words.append(line[index])
-            # elif char in arithmetic:
-            #     # print("found",lexeme)
-            #     if lexeme:
-            #         if(index<len(line) and char+line[index+1] in doubleCharElements):
-            #             # print("fhakj")
-            #             words.append(lexeme)
-            #             lexeme=""
-            #             lexeme+=char+line[index+1]
-            #             words.append(lexeme)
-            #             lexeme=""
-                        
-            #         else:
-            #             words.append(lexeme)
-            #             words.append(char)
-            #             lexeme=""
-            # elif char in assignment:
-            #     if lexeme:
-            #         if(index<len(line) and char+line[index+1] in doubleCharElements
-            #         #    or char + line[index + 1] in increment
-            #            ):
-            #             words.append(lexeme)
-            #             lexeme=""
-            #             # print("fhakj")
-            #             lexeme+=char+line[index+1]
-            #             words.append(lexeme)
-            #             lexeme=""
-            #         else:
-            #             words.append(lexeme)
-            #             words.append(char)
-            #             lexeme=""
-                
-            # elif char in assignment:
-                # if lexeme:
-                #     words.append(lexeme)
-                #     lexeme = ""
-                # words.append(char)
             elif char in punctuators:
                 if lexeme:
                     words.append(lexeme)
