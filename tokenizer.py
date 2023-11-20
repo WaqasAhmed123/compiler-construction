@@ -4,7 +4,7 @@ dataTypes = ["int", "str", "float", "bool", "char"]
 keywords=["if","else","else if","main","for","break","continue","while", "Public", "Main", "var"]
 punctuators = ['{', '}', '(', ')', '[', ']', ';']
 singleComment = "#"
-multiComment = '###'
+multiLineComment = '$$$'
 # ---------------------------------------------
 arithmetic = ['+', '-', '*', '/', '//', '%']
 assignment = ['+=', '-=', '*=', '/=', '%=','=']
@@ -18,13 +18,14 @@ operators = arithmetic + assignment + comparison + logical + bitwise + increment
 # singleCharElements=['+', '-', '*', '/','=','<','>','!','&', '|', '^', '~','%']
 # doubleCharElements=['+=', '-=', '*=', '/=', '%=','<=', '>=''&&', '||','++', '--']
 
-stringCheck=False
-multiCommentChecked=True
+stringCheckFlag=False
 
 
 words = []
-
 def customWordSplitter(lines):
+    skip_iterations = 0
+    global multiLineComment
+    multiLineCommentFlag=False
     global words
     lexeme = ""
     findingString=False 
@@ -32,26 +33,41 @@ def customWordSplitter(lines):
     for line in lines:
         for index in range(len(line)):
             char = line[index]
-            # if char == multiComment:
-            #     multiLineComment = not multiLineComment
-            #     break
+            
+            if skip_iterations > 0:
+                skip_iterations -= 1
+                continue
+            if char == "$":
+                if(line[index+2] and char+line[index+1]+line[index+2])==multiLineComment:
+                    
+                    print("char checked ",char+line[index+1]+line[index+2])
+                    multiLineCommentFlag= not multiLineCommentFlag
+                    skip_iterations = 2
+                    continue
+                    
+                    # print("before break",line)
+                    # break
+                    # continue
+            if multiLineCommentFlag:
+                print("checked line",line)
+                continue
             if char == singleComment:
                 break
-            elif(char=='"'):
-                if (lexeme):
-                    if findingString==True:
-                        lexeme+='"'
-                        words.append(lexeme)
-                        lexeme=""
-                        # continue
-                    else:
-                        words.append(lexeme)
-                        lexeme='"'
-                else:
-                    lexeme='"'
-                findingString=not findingString
-            elif findingString:
-                lexeme+=line[index]
+            # elif(char=='"'):
+            #     if (lexeme):
+            #         if findingString==True:
+            #             lexeme+='"'
+            #             words.append(lexeme)
+            #             lexeme=""
+            #             # continue
+            #         else:
+            #             words.append(lexeme)
+            #             lexeme='"'
+            #     else:
+            #         lexeme='"'
+            #     findingString=not findingString
+            # elif findingString:
+            #     lexeme+=line[index]
             elif char == '\n':
                 if lexeme:
                     words.append(lexeme)
@@ -62,19 +78,19 @@ def customWordSplitter(lines):
                     words.append(lexeme)
                     lexeme = ""
             elif char in operators:
+                
+                
                 if doubleOperator:
                     doubleOperator=False
                     lexeme=""
-                    print("executed",char+line[index+1])
                     break
                     
-                    print("found",char)
                 
                 if lexeme:
                     words.append(lexeme)
                     lexeme = ""
                 if line[index+1]:
-                    print("in second if",char)
+                    # print("in second if",char)
                     if line[index+1]+char in operators:
                         lexeme+=char+line[index+1]
                         words.append(lexeme)
@@ -146,6 +162,7 @@ def customWordSplitter(lines):
         # print("last",lexeme)
 
         if lexeme:
+            print("at last",lexeme)
             words.append(lexeme)
             lexeme = ""
 

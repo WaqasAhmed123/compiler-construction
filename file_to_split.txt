@@ -1,5 +1,6 @@
-Using System
-Public int main()
+$$$Using System
+Public int main
+$$$
 {
 Int a=7
 a++
