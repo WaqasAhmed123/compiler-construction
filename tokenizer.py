@@ -1,5 +1,6 @@
 import string
 import re
+import tabulate
 dataTypes = ["int", "str", "float", "bool", "char"]
 keywords=["if","else","else if","main","for","break","continue","while", "Public", "Main", "var"]
 punctuators = ['{', '}', '(', ')', '[', ']', ';']
@@ -208,3 +209,7 @@ for word in words:
 # for token in Tokens:
 #     print(token.CP, token.VP, token.LN)
 # print()
+table_data = [(token.CP, token.VP, token.LN) for token in Tokens]
+
+# Print the table
+print(tabulate.tabulate(table_data, headers=["CP", "VP", "LN"], tablefmt="fancy_grid"))
