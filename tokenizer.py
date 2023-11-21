@@ -118,12 +118,10 @@ for line in data:
 
 
 callFunction = customWordSplitter(linesList)
-# print(linesList)
-# print(words)
 
 
 
-
+# functions for CP mostly-------------------------------------
 def isKeyword(word):
     if word in keywords:
         return True
@@ -162,8 +160,7 @@ def isFloat(s):
 def isInt(s):
     return re.match(r'^[+-]?\d+$', s) is not None
 
-
-# Create instances of the Token class based on the words
+# Tokenization part-------------------------------
 Tokens = []
 class Token:
     def _init_(self):
@@ -203,8 +200,8 @@ for word in words:
 # for token in Tokens:
 #     print(token.CP, token.VP, token.LN)
 # print()
-table_data = [(token.CP, token.VP, token.LN) for token in Tokens]
+tableData = [(token.CP, token.VP, token.LN) for token in Tokens]
 
 # Print the table
-print(tabulate.tabulate(table_data, headers=["CP", "VP", "LN"], tablefmt="fancy_grid"))
+print(tabulate.tabulate(tableData, headers=["CP", "VP", "LN"], tablefmt="fancy_grid"))
 print(words)
