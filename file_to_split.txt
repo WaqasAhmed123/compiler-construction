@@ -1,12 +1,11 @@
-$$$Using System
+Using System
 Public int main
-$$$
 {
 Int a=7
 a++
 while(ac)
 {
-var str="Hello World”;
+var str="Hello World";
 a--
 }
 }

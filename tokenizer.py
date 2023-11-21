@@ -15,53 +15,50 @@ bitwise = ['&', '|', '^', '~', '<<', '>>']
 increment = ['++', '--']
 ternary = ['?']
 operators = arithmetic + assignment + comparison + logical + bitwise + increment + ternary
-stringCheckFlag=False
 
 
 words = []
 def customWordSplitter(lines):
-    skip_iterations = 0
+    stringCheckFlag=False
+    skipIterations = 0
     global multiLineComment
     multiLineCommentFlag=False
     global words
     lexeme = ""
-    findingString=False 
     doubleOperator=False
     for line in lines:
         for index in range(len(line)):
             char = line[index]
             
-            if skip_iterations > 0:
-                skip_iterations -= 1
+            if skipIterations > 0:
+                skipIterations -= 1
                 continue
             if char == "$":
                 if(line[index+2] and char+line[index+1]+line[index+2])==multiLineComment:
                     
-                    print("char checked ",char+line[index+1]+line[index+2])
                     multiLineCommentFlag= not multiLineCommentFlag
-                    skip_iterations = 2
+                    skipIterations = 2
                     continue
                     
             if multiLineCommentFlag:
-                print("checked line",line)
                 continue
             if char == singleComment:
                 break
-            # elif(char=='"'):
-            #     if (lexeme):
-            #         if findingString==True:
-            #             lexeme+='"'
-            #             words.append(lexeme)
-            #             lexeme=""
-            #             # continue
-            #         else:
-            #             words.append(lexeme)
-            #             lexeme='"'
-            #     else:
-            #         lexeme='"'
-            #     findingString=not findingString
-            # elif findingString:
-            #     lexeme+=line[index]
+            if(char=='"'):
+                print(lexeme)
+                stringCheckFlag=not stringCheckFlag
+                lexeme+=char
+                print(stringCheckFlag)
+                if  stringCheckFlag==False:
+                    words.append(lexeme)
+                    lexeme=""
+                    print("execution",lexeme)
+                else:
+                    continue
+            if stringCheckFlag:
+                lexeme+=char
+                print("important",lexeme)
+                continue
             elif char == '\n':
                 if lexeme:
                     words.append(lexeme)
@@ -84,7 +81,6 @@ def customWordSplitter(lines):
                     words.append(lexeme)
                     lexeme = ""
                 if line[index+1]:
-                    # print("in second if",char)
                     if line[index+1]+char in operators:
                         lexeme+=char+line[index+1]
                         words.append(lexeme)
@@ -106,10 +102,8 @@ def customWordSplitter(lines):
                 words.append(char)
             else:
                 lexeme += char
-        # print("last",lexeme)
 
         if lexeme:
-            print("at last",lexeme)
             words.append(lexeme)
             lexeme = ""
 
@@ -212,4 +206,5 @@ for word in words:
 table_data = [(token.CP, token.VP, token.LN) for token in Tokens]
 
 # Print the table
-print(tabulate.tabulate(table_data, headers=["CP", "VP", "LN"], tablefmt="fancy_grid"))
+# print(tabulate.tabulate(table_data, headers=["CP", "VP", "LN"], tablefmt="fancy_grid"))
+print("")
