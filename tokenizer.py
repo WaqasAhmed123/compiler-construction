@@ -16,7 +16,7 @@ increment = ['++', '--']
 ternary = ['?']
 operators = arithmetic + assignment + comparison + logical + bitwise + increment + ternary
 
-
+# word splitter takes linesList as a parameter and return splitted words-----------------------
 words = []
 def customWordSplitter(lines):
     stringCheckFlag=False
@@ -33,31 +33,28 @@ def customWordSplitter(lines):
             if skipIterations > 0:
                 skipIterations -= 1
                 continue
-            if char == "$":
+            elif char == "$":
                 if(line[index+2] and char+line[index+1]+line[index+2])==multiLineComment:
                     
                     multiLineCommentFlag= not multiLineCommentFlag
                     skipIterations = 2
                     continue
                     
-            if multiLineCommentFlag:
+            elif multiLineCommentFlag:
                 continue
-            if char == singleComment:
+            elif char == singleComment:
                 break
-            if(char=='"'):
-                print(lexeme)
+            elif(char=='"'):
                 stringCheckFlag=not stringCheckFlag
                 lexeme+=char
-                print(stringCheckFlag)
                 if  stringCheckFlag==False:
                     words.append(lexeme)
                     lexeme=""
-                    print("execution",lexeme)
+                    continue
                 else:
                     continue
-            if stringCheckFlag:
+            elif stringCheckFlag:
                 lexeme+=char
-                print("important",lexeme)
                 continue
             elif char == '\n':
                 if lexeme:
@@ -82,8 +79,10 @@ def customWordSplitter(lines):
                     lexeme = ""
                 if line[index+1]:
                     if line[index+1]+char in operators:
+                        print("check1",lexeme)
                         lexeme+=char+line[index+1]
                         words.append(lexeme)
+                        print("check",lexeme)
                         lexeme=""
                         doubleOperator=True
                     else:
@@ -109,6 +108,7 @@ def customWordSplitter(lines):
 
     return words
 
+#read the txt file and create linesList accordingly --------------------------
 f = open("file_to_split.txt", "r",encoding="utf-8")
 data = f.read()
 data=data.split("\n")
@@ -117,9 +117,9 @@ for line in data:
     linesList.append(line+'\n')
 
 
-result = customWordSplitter(linesList)
-print(linesList)
-print(words)
+callFunction = customWordSplitter(linesList)
+# print(linesList)
+# print(words)
 
 
 
@@ -206,5 +206,5 @@ for word in words:
 table_data = [(token.CP, token.VP, token.LN) for token in Tokens]
 
 # Print the table
-# print(tabulate.tabulate(table_data, headers=["CP", "VP", "LN"], tablefmt="fancy_grid"))
-print("")
+print(tabulate.tabulate(table_data, headers=["CP", "VP", "LN"], tablefmt="fancy_grid"))
+print(words)
