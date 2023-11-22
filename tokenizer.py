@@ -36,8 +36,17 @@ def customWordSplitter(lines):
             elif char == "$":
                 if(line[index+2] and char+line[index+1]+line[index+2])==multiLineComment:
                     multiLineCommentFlag= not multiLineCommentFlag
+                # if not multiLineCommentFlag and skipIterations==1 and line[index+2] and line[index+1]+ line[index+2]=='\n': 
+                # if not multiLineCommentFlag : 
+                #     print("found",line[index+2])
+                    
+                #     skipIterations = 4
+                # else:
                     skipIterations = 2
+                    # print("second if")
                     continue
+                    
+                
                     
             elif multiLineCommentFlag:
                 continue
