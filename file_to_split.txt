@@ -1,5 +1,5 @@
 Using System
-Public int main
+Public int main()
 {
 Int a=7
 a++

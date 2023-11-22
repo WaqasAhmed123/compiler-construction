@@ -35,7 +35,6 @@ def customWordSplitter(lines):
                 continue
             elif char == "$":
                 if(line[index+2] and char+line[index+1]+line[index+2])==multiLineComment:
-                    
                     multiLineCommentFlag= not multiLineCommentFlag
                     skipIterations = 2
                     continue
@@ -66,14 +65,11 @@ def customWordSplitter(lines):
                     words.append(lexeme)
                     lexeme = ""
             elif char in operators:
-                
-                
                 if doubleOperator:
                     doubleOperator=False
                     lexeme=""
-                    break
+                    continue
                     
-                
                 if lexeme:
                     words.append(lexeme)
                     lexeme = ""
@@ -118,6 +114,7 @@ for line in data:
 
 
 callFunction = customWordSplitter(linesList)
+print(linesList)
 
 
 
