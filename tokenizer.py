@@ -2,7 +2,7 @@
 import re
 import tabulate
 dataTypes = ["int", "str", "double", "bool", "char"]
-keywords=["if","else","elif","main","for","break","continue","while", "Public", "Main", "var"]
+keywords=["if","else","elif","main","for","break","continue","while", "Public", "Main", "var","interface"]
 punctuators = ['{', '}', '(', ')', '[', ']', ';']
 singleComment = "#"
 multiLineComment = '$$$'
@@ -86,9 +86,16 @@ def customWordSplitter(lines):
                 if line[index+1]:
                     if line[index+1]+char in operators:
                         lexeme+=char+line[index+1]
-                        words.append(lexeme)
-                        lexeme=""
-                        doubleOperator=True
+                        if line[index+2] and line[index+2] in operators:
+                            lexeme+=line[index+2]
+                            words.append(lexeme)
+                            lexeme=""
+                            skipIterations = 2
+                            
+                        else:
+                            words.append(lexeme)
+                            lexeme=""
+                            doubleOperator=True
                     else:
                         lexeme+=char
                         words.append(lexeme)
@@ -98,6 +105,14 @@ def customWordSplitter(lines):
                     lexeme+=char
                     words.append(lexeme)               
                     lexeme=""
+            elif char ==".":
+                if lexeme:
+                    words.append(lexeme)
+                    lexeme = ""
+                    words.append(char)
+                else:
+                    lexeme += char
+                
             elif char in punctuators:
                 if lexeme:
                     words.append(lexeme)
@@ -210,6 +225,6 @@ tableData = [(token.CP, token.VP, token.LN) for token in Tokens]
 
 # Print the table
 print(tabulate.tabulate(tableData, headers=["CP", "VP", "LN"], tablefmt="fancy_grid"))
-# print(words)  
+print(words)  
 
 
