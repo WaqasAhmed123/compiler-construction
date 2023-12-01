@@ -197,7 +197,7 @@ for word in words:
     elif (isInt(word)):
         t.CP="integer"
     elif (isFloat(word)):
-        t.CP="float"
+        t.CP="double"
     elif (word in operators):
         
         t.CP=findOperatorType(word)
