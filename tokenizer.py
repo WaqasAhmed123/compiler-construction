@@ -1,8 +1,8 @@
-import string
+# import string
 import re
 import tabulate
-dataTypes = ["int", "str", "float", "bool", "char"]
-keywords=["if","else","else if","main","for","break","continue","while", "Public", "Main", "var"]
+dataTypes = ["int", "str", "double", "bool", "char"]
+keywords=["if","else","elif","main","for","break","continue","while", "Public", "Main", "var"]
 punctuators = ['{', '}', '(', ')', '[', ']', ';']
 singleComment = "#"
 multiLineComment = '$$$'
@@ -12,9 +12,10 @@ assignment = ['+=', '-=', '*=', '/=', '%=','=']
 comparison = ['==', '!=', '<', '>', '<=', '>=']
 logical = ['&&', '||', '!']
 bitwise = ['&', '|', '^', '~', '<<', '>>']
-increment = ['++', '--']
+increment = ['++']
+decrement = ['--']
 ternary = ['?']
-operators = arithmetic + assignment + comparison + logical + bitwise + increment + ternary
+operators = arithmetic + assignment + comparison + logical + bitwise + increment + decrement+ ternary
 
 # word splitter takes linesList as a parameter and return splitted words-----------------------
 words = []
@@ -84,10 +85,8 @@ def customWordSplitter(lines):
                     lexeme = ""
                 if line[index+1]:
                     if line[index+1]+char in operators:
-                        print("check1",lexeme)
                         lexeme+=char+line[index+1]
                         words.append(lexeme)
-                        print("check",lexeme)
                         lexeme=""
                         doubleOperator=True
                     else:
@@ -122,8 +121,8 @@ for line in data:
     linesList.append(line+'\n')
 
 
-callFunction = customWordSplitter(linesList)
-print(linesList)
+result= customWordSplitter(linesList)
+# print(linesList)
 
 
 
@@ -151,6 +150,8 @@ def findOperatorType(word):
         return "bitwise" 
     elif word in increment:
         return "increment" 
+    elif word in decrement:
+        return "decrement" 
     elif word in ternary:
         return "ternary" 
 
@@ -210,4 +211,6 @@ tableData = [(token.CP, token.VP, token.LN) for token in Tokens]
 
 # Print the table
 print(tabulate.tabulate(tableData, headers=["CP", "VP", "LN"], tablefmt="fancy_grid"))
-print(words)
+# print(words)
+
+
