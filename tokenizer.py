@@ -199,7 +199,6 @@ for word in words:
     elif (isFloat(word)):
         t.CP="double"
     elif (word in operators):
-        
         t.CP=findOperatorType(word)
     else:
         t.CP="undefined"
@@ -211,6 +210,6 @@ tableData = [(token.CP, token.VP, token.LN) for token in Tokens]
 
 # Print the table
 print(tabulate.tabulate(tableData, headers=["CP", "VP", "LN"], tablefmt="fancy_grid"))
-# print(words)
+# print(words)  
 
 
