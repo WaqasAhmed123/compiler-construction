@@ -1,7 +1,7 @@
 # import string
 import re
 import tabulate
-dataTypes = ["int", "str", "double", "bool", "char"]
+dataTypes = ["int", "string", "double", "bool", "char"]
 keywords=["if","else","elif","main","for","break","continue","while", "Public", "Main", "var","interface",'return']
 punctuators = ['{', '}', '(', ')', '[', ']', ';','.']
 singleComment = "#"
@@ -23,6 +23,7 @@ def isInt(s):
 # word splitter takes linesList as a parameter and return splitted words-----------------------
 words = []
 def customWordSplitter(lines):
+    iterationsToSkip=0
     stringCheckFlag=False
     doubleCheckFlag=False
     skipIterations = 0
@@ -136,19 +137,28 @@ def customWordSplitter(lines):
                                 if line[next_index].isdigit():
                                     print("char is ",line[next_index])
                                     lexeme += line[next_index]
+                                    iterationsToSkip+=1
                                 else:
                                     doubleCheckFlag=not doubleCheckFlag
                                     words.append(lexeme)
-                                    skipIterations=len(lexeme)-2
+                                    # skipIterations=len(lexeme)-2
+                                    skipIterations=iterationsToSkip
+                                    print("check",lexeme)
                                     lexeme=""
+                                    # break
                     else:
-                        # lexeme += char
-                        
-                        # print("caught",lexeme)
-                        words.append(lexeme)
-                        lexeme = ""
-                        
-                words.append(char)
+                        if lexeme:
+                            words.append(lexeme)
+                            lexeme = ""
+                            lexeme += char
+                            print("caught",lexeme)
+                            words.append(lexeme)
+                            lexeme = ""
+                else:
+                    lexeme+=char
+                    print("hahah",lexeme)
+                    words.append(lexeme)
+                    lexeme=""
             else:
                 lexeme += char
                 # print("hfaklh",lexeme)
