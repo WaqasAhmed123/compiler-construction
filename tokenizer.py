@@ -80,23 +80,26 @@ def customWordSplitter(lines):
                     words.append(lexeme)
                     lexeme = ""
             elif char in operators:
-                if doubleOperator:
-                    doubleOperator=False
-                    lexeme=""
-                    continue
-                    
+                # if doubleOperator:
+                #     doubleOperator=False
+                #     lexeme=""
+                #     continue
+
                 if lexeme:
+                    print("in a",lexeme)
                     words.append(lexeme)
                     lexeme = ""
                 if line[index+1]:
-                    if line[index+1]+char in operators:
+                    if char+line[index+1] in operators:
                         lexeme+=char+line[index+1]
+                        print("check",lexeme)
+                        
                         # if line[index+2] and line[index+2] in operators:
                             # lexeme+=line[index+2]
                         words.append(lexeme)
                         lexeme=""
-                        doubleOperator=True
-                            # skipIterations = 2
+                        # doubleOperator=True
+                        skipIterations = 1
                             
                         # else:
                         #     words.append(lexeme)
@@ -143,7 +146,6 @@ def customWordSplitter(lines):
                                     words.append(lexeme)
                                     # skipIterations=len(lexeme)-2
                                     skipIterations=iterationsToSkip
-                                    print("check",lexeme)
                                     lexeme=""
                                     # break
                     else:
@@ -151,22 +153,17 @@ def customWordSplitter(lines):
                             words.append(lexeme)
                             lexeme = ""
                             lexeme += char
-                            print("caught",lexeme)
                             words.append(lexeme)
                             lexeme = ""
                 else:
                     lexeme+=char
-                    print("hahah",lexeme)
                     words.append(lexeme)
                     lexeme=""
             else:
                 lexeme += char
-                # print("hfaklh",lexeme)
                 
             
         if lexeme:
-            # if isInt(char):
-            # if isInt(char):
                 
             print("last if",lexeme)
             words.append(lexeme)
