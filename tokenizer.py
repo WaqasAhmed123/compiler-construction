@@ -42,14 +42,7 @@ def customWordSplitter(lines):
             elif char == "$":
                 if(line[index+2] and char+line[index+1]+line[index+2])==multiLineComment:
                     multiLineCommentFlag= not multiLineCommentFlag
-                # if not multiLineCommentFlag and skipIterations==1 and line[index+2] and line[index+1]+ line[index+2]=='\n': 
-                # if not multiLineCommentFlag : 
-                #     print("found",line[index+2])
-                    
-                #     skipIterations = 4
-                # else:
                     skipIterations = 2
-                    # print("second if")
                     continue
                     
                 
@@ -80,10 +73,6 @@ def customWordSplitter(lines):
                     words.append(lexeme)
                     lexeme = ""
             elif char in operators:
-                # if doubleOperator:
-                #     doubleOperator=False
-                #     lexeme=""
-                #     continue
 
                 if lexeme:
                     print("in a",lexeme)
@@ -94,16 +83,10 @@ def customWordSplitter(lines):
                         lexeme+=char+line[index+1]
                         print("check",lexeme)
                         
-                        # if line[index+2] and line[index+2] in operators:
-                            # lexeme+=line[index+2]
                         words.append(lexeme)
                         lexeme=""
-                        # doubleOperator=True
                         skipIterations = 1
                             
-                        # else:
-                        #     words.append(lexeme)
-                        #     lexeme=""
                     else:
                         lexeme+=char
                         words.append(lexeme)
@@ -112,21 +95,7 @@ def customWordSplitter(lines):
                     lexeme+=char
                     words.append(lexeme)               
                     lexeme=""
-                    
-            # elif isInt(char)==True:
-            #     lexeme+=char
-            #     continue
-            # elif char ==".":
-            #     if lexeme:
-            #         # if line[index-1] and isInt(line[index-1])==True and (line[index+1]) and isInt(line[index+1]==True):
-                        
-                        
-            #         words.append(lexeme)
-            #         lexeme = ""
-            #         words.append(char)
-            #     else:
-            #         lexeme += char
-                    
+                             
                 
             elif char in punctuators:
                 if lexeme:
@@ -134,9 +103,6 @@ def customWordSplitter(lines):
                         lexeme += char
                         if not doubleCheckFlag:
                             for next_index in range(index + 1, len(line)):
-                                # print("executed")
-                                # if isInt(char):
-                                #     lexeme+=char
                                 if line[next_index].isdigit():
                                     print("char is ",line[next_index])
                                     lexeme += line[next_index]
@@ -144,10 +110,8 @@ def customWordSplitter(lines):
                                 else:
                                     doubleCheckFlag=not doubleCheckFlag
                                     words.append(lexeme)
-                                    # skipIterations=len(lexeme)-2
                                     skipIterations=iterationsToSkip
                                     lexeme=""
-                                    # break
                     else:
                         if lexeme:
                             words.append(lexeme)
