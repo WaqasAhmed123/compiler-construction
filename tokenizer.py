@@ -2,25 +2,29 @@
 import re
 import tabulate
 dataTypes = ["int", "str", "double", "bool", "char"]
-keywords=["if","else","elif","main","for","break","continue","while", "Public", "Main", "var","interface"]
-punctuators = ['{', '}', '(', ')', '[', ']', ';']
+keywords=["if","else","elif","main","for","break","continue","while", "Public", "Main", "var","interface",'return']
+punctuators = ['{', '}', '(', ')', '[', ']', ';','.']
 singleComment = "#"
 multiLineComment = '$$$'
 # ---------------------------------------------
 arithmetic = ['+', '-', '*', '/', '//', '%']
 assignment = ['+=', '-=', '*=', '/=', '%=','=']
-comparison = ['==', '!=', '<', '>', '<=', '>=']
+comparison = ['<=', '>=','==', '!=', '<', '>', ]
 logical = ['&&', '||', '!']
 bitwise = ['&', '|', '^', '~', '<<', '>>']
 increment = ['++']
 decrement = ['--']
-ternary = ['?']
+ternary = ['?',':']
 operators = arithmetic + assignment + comparison + logical + bitwise + increment + decrement+ ternary
 
+
+def isInt(s):
+    return re.match(r'^[+-]?\d+$', s) is not None
 # word splitter takes linesList as a parameter and return splitted words-----------------------
 words = []
 def customWordSplitter(lines):
     stringCheckFlag=False
+    doubleCheckFlag=False
     skipIterations = 0
     global multiLineComment
     multiLineCommentFlag=False
@@ -53,7 +57,7 @@ def customWordSplitter(lines):
                 continue
             elif char == singleComment:
                 break
-            elif(char=='"'):
+            elif(char=='"' or char =="'"):
                 stringCheckFlag=not stringCheckFlag
                 lexeme+=char
                 if  stringCheckFlag==False:
@@ -86,42 +90,75 @@ def customWordSplitter(lines):
                 if line[index+1]:
                     if line[index+1]+char in operators:
                         lexeme+=char+line[index+1]
-                        if line[index+2] and line[index+2] in operators:
-                            lexeme+=line[index+2]
-                            words.append(lexeme)
-                            lexeme=""
-                            skipIterations = 2
+                        # if line[index+2] and line[index+2] in operators:
+                            # lexeme+=line[index+2]
+                        words.append(lexeme)
+                        lexeme=""
+                        doubleOperator=True
+                            # skipIterations = 2
                             
-                        else:
-                            words.append(lexeme)
-                            lexeme=""
-                            doubleOperator=True
+                        # else:
+                        #     words.append(lexeme)
+                        #     lexeme=""
                     else:
                         lexeme+=char
                         words.append(lexeme)
                         lexeme=""
                 else:
-                    print("caught",char)
                     lexeme+=char
                     words.append(lexeme)               
                     lexeme=""
-            elif char ==".":
-                if lexeme:
-                    words.append(lexeme)
-                    lexeme = ""
-                    words.append(char)
-                else:
-                    lexeme += char
+                    
+            # elif isInt(char)==True:
+            #     lexeme+=char
+            #     continue
+            # elif char ==".":
+            #     if lexeme:
+            #         # if line[index-1] and isInt(line[index-1])==True and (line[index+1]) and isInt(line[index+1]==True):
+                        
+                        
+            #         words.append(lexeme)
+            #         lexeme = ""
+            #         words.append(char)
+            #     else:
+            #         lexeme += char
+                    
                 
             elif char in punctuators:
                 if lexeme:
-                    words.append(lexeme)
-                    lexeme = ""
+                    if char =='.' and isInt(lexeme):
+                        lexeme += char
+                        if not doubleCheckFlag:
+                            for next_index in range(index + 1, len(line)):
+                                # print("executed")
+                                # if isInt(char):
+                                #     lexeme+=char
+                                if line[next_index].isdigit():
+                                    print("char is ",line[next_index])
+                                    lexeme += line[next_index]
+                                else:
+                                    doubleCheckFlag=not doubleCheckFlag
+                                    words.append(lexeme)
+                                    skipIterations=len(lexeme)-2
+                                    lexeme=""
+                    else:
+                        # lexeme += char
+                        
+                        # print("caught",lexeme)
+                        words.append(lexeme)
+                        lexeme = ""
+                        
                 words.append(char)
             else:
                 lexeme += char
-
+                # print("hfaklh",lexeme)
+                
+            
         if lexeme:
+            # if isInt(char):
+            # if isInt(char):
+                
+            print("last if",lexeme)
             words.append(lexeme)
             lexeme = ""
 
@@ -179,8 +216,11 @@ def isChar(s):
 def isFloat(s):
     return re.match(r'^[+-]?\d*\.\d+$', s) is not None
 
-def isInt(s):
-    return re.match(r'^[+-]?\d+$', s) is not None
+def isVariable(s):
+    return re.match(r'^[a-zA-Z_][a-zA-Z0-9_]*$', s) is not None
+
+
+
 
 # Tokenization part-------------------------------
 Tokens = []
@@ -213,6 +253,8 @@ for word in words:
         t.CP="integer"
     elif (isFloat(word)):
         t.CP="double"
+    elif (isVariable(word)):
+        t.CP="variable"
     elif (word in operators):
         t.CP=findOperatorType(word)
     else:
