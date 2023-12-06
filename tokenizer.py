@@ -63,11 +63,16 @@ def customWordSplitter(lines):
             elif stringCheckFlag:
                 lexeme+=char
                 continue
+            # elif index + 1 < len(line) and char + line[index + 1] == '\n':
+            # elif line[index+1] and  char+line[index+1] == '\n':
             elif char == '\n':
+            # elif char == '\\' and line[index+1] and line[index+1]=="n":
+                print("exe",char)
                 if lexeme:
                     words.append(lexeme)
                     lexeme = ""
-                words.append('\n')    
+                words.append('\n')
+                # skipIterations=1    
             elif char == " ":
                 if lexeme:
                     words.append(lexeme)
@@ -75,14 +80,11 @@ def customWordSplitter(lines):
             elif char in operators:
 
                 if lexeme:
-                    print("in a",lexeme)
                     words.append(lexeme)
                     lexeme = ""
                 if line[index+1]:
                     if char+line[index+1] in operators:
                         lexeme+=char+line[index+1]
-                        print("check",lexeme)
-                        
                         words.append(lexeme)
                         lexeme=""
                         skipIterations = 1
@@ -100,8 +102,11 @@ def customWordSplitter(lines):
             elif char in punctuators:
                 if lexeme:
                     if char =='.' and isInt(lexeme):
+                        print("got ",lexeme)
                         lexeme += char
                         if not doubleCheckFlag:
+                            # lexeme += char
+                            
                             for next_index in range(index + 1, len(line)):
                                 if line[next_index].isdigit():
                                     print("char is ",line[next_index])
@@ -142,10 +147,11 @@ data=data.split("\n")
 linesList=[]
 for line in data:
     linesList.append(line+'\n')
+    # linesList.append('\n')
 
 
 result= customWordSplitter(linesList)
-# print(linesList)
+print(linesList)
 
 
 
@@ -179,7 +185,7 @@ def findOperatorType(word):
         return "ternary" 
 
 def isString(s):
-    return re.match(r'^".*"$', s) is not None
+    return re.match(r'^["\'].*["\']$', s) is not None
 
 def isChar(s):
     return re.match(r'^[a-zA-Z]$', s) is not None
@@ -204,7 +210,7 @@ class Token:
 
 lineNumber=1
 for word in words:
-    if word=='\n':
+    if word=='\n' or word=="\n":
         lineNumber += 1
         continue
     t = Token()
