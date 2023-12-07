@@ -100,17 +100,16 @@ def customWordSplitter(lines):
                     if char =='.' and isInt(lexeme):
                         lexeme += char
                         if not doubleCheckFlag:
-                            # lexeme += char
-                            
                             for next_index in range(index + 1, len(line)):
                                 if line[next_index].isdigit():
                                     print("char is ",line[next_index])
                                     lexeme += line[next_index]
-                                    iterationsToSkip+=1
+                                    # iterationsToSkip+=1
+                                    skipIterations+=1
                                 else:
                                     doubleCheckFlag=not doubleCheckFlag
                                     words.append(lexeme)
-                                    skipIterations=iterationsToSkip
+                                    # skipIterations=iterationsToSkip
                                     lexeme=""
                     else:
                         if lexeme:
@@ -125,17 +124,12 @@ def customWordSplitter(lines):
                     lexeme=""
             else:
                 lexeme += char
-                print("got",lexeme)
                 if lexeme=="\\n":
-                    print("got real",lexeme)
                     words.append('\n')
-                    # words.append(lexeme)
                     lexeme=""
                 
             
         if lexeme:
-                
-            print("last if",lexeme)
             words.append(lexeme)
             lexeme = ""
 
@@ -249,7 +243,8 @@ for word in words:
     elif (word in operators):
         t.CP=findOperatorType(word)
     else:
-        t.CP="undefined"
+        # t.CP="undefined"
+        t.CP="invalid"
     Tokens.append(t)
     # if word=='\n':
     #     lineNumber += 1
