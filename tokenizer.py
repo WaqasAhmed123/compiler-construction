@@ -44,9 +44,6 @@ def customWordSplitter(lines):
                     multiLineCommentFlag= not multiLineCommentFlag
                     skipIterations = 2
                     continue
-                    
-                
-                    
             elif multiLineCommentFlag:
                 continue
             elif char == singleComment:
@@ -67,7 +64,6 @@ def customWordSplitter(lines):
             # elif line[index+1] and  char+line[index+1] == '\n':
             elif char == '\n':
             # elif char == '\\' and line[index+1] and line[index+1]=="n":
-                print("exe",char)
                 if lexeme:
                     words.append(lexeme)
                     lexeme = ""
@@ -102,7 +98,6 @@ def customWordSplitter(lines):
             elif char in punctuators:
                 if lexeme:
                     if char =='.' and isInt(lexeme):
-                        print("got ",lexeme)
                         lexeme += char
                         if not doubleCheckFlag:
                             # lexeme += char
@@ -130,6 +125,12 @@ def customWordSplitter(lines):
                     lexeme=""
             else:
                 lexeme += char
+                print("got",lexeme)
+                if lexeme=="\\n":
+                    print("got real",lexeme)
+                    words.append('\n')
+                    # words.append(lexeme)
+                    lexeme=""
                 
             
         if lexeme:
@@ -143,10 +144,19 @@ def customWordSplitter(lines):
 #read the txt file and create linesList accordingly --------------------------
 f = open("file_to_split.txt", "r",encoding="utf-8")
 data = f.read()
-data=data.split("\n")
+data=data.split('\n')
 linesList=[]
-for line in data:
-    linesList.append(line+'\n')
+for i, line in enumerate(data):
+    if i < len(data) - 1:
+        linesList.append(line + '\n')
+    else:
+        linesList.append(line)
+# for line in data:
+#     if(line.index < len(data)):
+#         linesList.append(line+'\n')
+#     else:
+#         linesList.append(line)
+        
     # linesList.append('\n')
 
 
@@ -210,14 +220,18 @@ class Token:
 
 lineNumber=1
 for word in words:
-    if word=='\n' or word=="\n":
-        lineNumber += 1
-        continue
+    # if word=='\n':
+    #     lineNumber += 1
+        # continue
     t = Token()
     t.VP=word
     t.LN=lineNumber
     if (isKeyword(word)):
         t.CP="keyword"
+    elif word=="\n":
+        t.CP="new line"
+        lineNumber += 1
+        t.VP='\\n'
     elif (isDatatype(word)):
         t.CP="datatype"
     elif (word in punctuators):
@@ -231,12 +245,14 @@ for word in words:
     elif (isFloat(word)):
         t.CP="double"
     elif (isVariable(word)):
-        t.CP="variable"
+        t.CP="ID"
     elif (word in operators):
         t.CP=findOperatorType(word)
     else:
         t.CP="undefined"
     Tokens.append(t)
+    # if word=='\n':
+    #     lineNumber += 1
 # for token in Tokens:
 #     print(token.CP, token.VP, token.LN)
 # print()
